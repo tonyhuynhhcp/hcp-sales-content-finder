@@ -2887,7 +2887,7 @@ const $=id=>document.getElementById(id);
    tracking on. Every event is a lightweight ping — no personal data,
    just: which action, which trade/need, and an anonymous browser id so
    you can count reps (adoption) and actions (activity).            */
-const LOG_ENDPOINT = "https://script.google.com/macros/s/AKfycbyZEUF28eKT3t5qGqXQ7gwf1R26WqUkVHo5GAPxJK1QNpn_43PuJUihnldSkhlOtis8Cg/exec";
+const LOG_ENDPOINT = "https://script.google.com/macros/s/AKfycbzRToHKcLi1lQMuVcPDqr13G6_5WP_11dKI2XefP-rdvDXaw6LQM2B-zPoLtsv4_DmRTw/exec";
 let _lastBest = "";
 function _rid(){return Math.random().toString(36).slice(2)+Date.now().toString(36);}
 function _vid(){try{let v=localStorage.getItem("scf_vid");if(!v){v=_rid();localStorage.setItem("scf_vid",v);}return v;}catch(e){return "nols";}}
