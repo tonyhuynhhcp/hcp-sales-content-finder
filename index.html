@@ -2901,9 +2901,14 @@ function track(ev, extra){
       trade:state.trade||"", need:state.need||"",
       segment:state.segment||"", region:state.region||""
     }, extra||{}));
-    const url=LOG_ENDPOINT+(LOG_ENDPOINT.indexOf("?")>=0?"&":"?")+p.toString();
-    if(navigator.sendBeacon){ navigator.sendBeacon(url); }
-    else { new Image().src=url; }
+    const body=p.toString();
+    // Send data in the POST body so Google's redirect can't strip it.
+    if(navigator.sendBeacon){
+      navigator.sendBeacon(LOG_ENDPOINT, new Blob([body], {type:"application/x-www-form-urlencoded"}));
+    } else {
+      fetch(LOG_ENDPOINT, {method:"POST", mode:"no-cors", keepalive:true,
+        headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:body});
+    }
   }catch(e){}
 }
 track("tool_opened");
