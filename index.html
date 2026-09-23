@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RZZJL2QWZ6"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-RZZJL2QWZ6');
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sales Content Finder — Housecall Pro</title>
@@ -2904,6 +2912,7 @@ function track(ev, extra){
     // Image GET: simplest cross-origin fire-and-forget. Follows Google's
     // redirect as a GET, so the query params arrive as e.parameter.
     new Image().src = LOG_ENDPOINT + "?" + p.toString();
+    if(window.gtag){ gtag("event", ev, Object.assign({trade:state.trade||"", need:state.need||"", segment:state.segment||"", region:state.region||""}, extra||{})); }
   }catch(e){}
 }
 track("tool_opened");
