@@ -2887,7 +2887,7 @@ const $=id=>document.getElementById(id);
    tracking on. Every event is a lightweight ping — no personal data,
    just: which action, which trade/need, and an anonymous browser id so
    you can count reps (adoption) and actions (activity).            */
-const LOG_ENDPOINT = "https://script.google.com/macros/s/AKfycbzRToHKcLi1lQMuVcPDqr13G6_5WP_11dKI2XefP-rdvDXaw6LQM2B-zPoLtsv4_DmRTw/exec";
+const LOG_ENDPOINT = "https://script.google.com/macros/s/AKfycbwngCKRl_xFMUd6Go2kIInWWhj2HSgq5FFCnrIvsBIxM_IEcg1ImzqK0gzEK7XyK6kS/exec";
 let _lastBest = "";
 function _rid(){return Math.random().toString(36).slice(2)+Date.now().toString(36);}
 function _vid(){try{let v=localStorage.getItem("scf_vid");if(!v){v=_rid();localStorage.setItem("scf_vid",v);}return v;}catch(e){return "nols";}}
@@ -2895,17 +2895,15 @@ const SID=_rid();
 function track(ev, extra){
   try{
     if(!LOG_ENDPOINT) return;
-    const data=Object.assign({
+    const p=new URLSearchParams(Object.assign({
       event:ev, ts:new Date().toISOString(),
       vid:_vid(), sid:SID,
       trade:state.trade||"", need:state.need||"",
       segment:state.segment||"", region:state.region||""
-    }, extra||{});
-    // POST as text/plain (no CORS preflight) with keepalive so it survives
-    // navigation and Google's redirect. Apps Script reads it from postData.
-    fetch(LOG_ENDPOINT, {method:"POST", mode:"no-cors", keepalive:true,
-      headers:{"Content-Type":"text/plain;charset=utf-8"},
-      body: JSON.stringify(data)});
+    }, extra||{}));
+    // Image GET: simplest cross-origin fire-and-forget. Follows Google's
+    // redirect as a GET, so the query params arrive as e.parameter.
+    new Image().src = LOG_ENDPOINT + "?" + p.toString();
   }catch(e){}
 }
 track("tool_opened");
