@@ -2895,20 +2895,17 @@ const SID=_rid();
 function track(ev, extra){
   try{
     if(!LOG_ENDPOINT) return;
-    const p=new URLSearchParams(Object.assign({
+    const data=Object.assign({
       event:ev, ts:new Date().toISOString(),
       vid:_vid(), sid:SID,
       trade:state.trade||"", need:state.need||"",
       segment:state.segment||"", region:state.region||""
-    }, extra||{}));
-    const body=p.toString();
-    // Send data in the POST body so Google's redirect can't strip it.
-    if(navigator.sendBeacon){
-      navigator.sendBeacon(LOG_ENDPOINT, new Blob([body], {type:"application/x-www-form-urlencoded"}));
-    } else {
-      fetch(LOG_ENDPOINT, {method:"POST", mode:"no-cors", keepalive:true,
-        headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:body});
-    }
+    }, extra||{});
+    // POST as text/plain (no CORS preflight) with keepalive so it survives
+    // navigation and Google's redirect. Apps Script reads it from postData.
+    fetch(LOG_ENDPOINT, {method:"POST", mode:"no-cors", keepalive:true,
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify(data)});
   }catch(e){}
 }
 track("tool_opened");
